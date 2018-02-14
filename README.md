@@ -3,6 +3,10 @@
 
 API is a [GPL Cart](https://github.com/gplcart/gplcart) module that helps to implement WEB API for your GPLCart. Basically it provides a simple authorization mechanism based on [JWT tokens](https://jwt.io) and uses other modules as a data source. It does nothing by itself, so do not install unless other modules require it.
 
+**Requirements**
+
+- [Oauth module](https://github.com/gplcart/oauth)
+
 **Installation**
 
 1. Download and extract to `system/modules` manually or using composer `composer require gplcart/api`. IMPORTANT: If you downloaded the module manually, be sure that the name of extracted module folder doesn't contain a branch/version suffix, e.g `-master`. Rename if needed.
