@@ -14,7 +14,7 @@ API is a [GPL Cart](https://github.com/gplcart/gplcart) module that helps to imp
 **Usage**
 
 Look at `example.php` for code samples.
-API endpoint - http://domain.com/**api**. This URL is used for initial login to get an access token. Once you got the token you are able to query API with the path arguments, e.g: http://domain.com/api/arg1/arg2/arg3. You can pass API version as a query parameter: http://domain.com/api/arg1/arg2/arg3?varsion=1.0. Note: there is no way (yet) to refresh access tokens. You should re-login after your access token has expired.
+API endpoint - http://yourdomain.com/api. This URL is used for initial login to get an access token. Once you got the token you are able to query API with URL arguments, e.g: http://domain.com/api/arg1/arg2/arg3. You can pass API version as a query parameter: http://yourdomain.com/api/arg1/arg2/arg3?varsion=1.0. Note: there is no way (yet) to refresh access tokens. You should re-login after your access token has expired.
 
 **Data providers**
 
