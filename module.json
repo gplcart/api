@@ -1,0 +1,18 @@
+{
+  "name": "API",
+  "core": "1.x",
+  "author": "Iurii Makukh <gplcart.software@gmail.com>",
+  "license": "GPL-3.0-or-later",
+  "version": "1.0.0-dev",
+  "description": "A helper module to implement Web API based on JWT authorization",
+  "configure": "admin/module/settings/api",
+  "settings": {
+    "status": false,
+    "secret": "",
+    "jwt_alg": "HS256",
+    "jwt_lifetime": 3600
+  },
+  "dependencies": {
+    "oauth": "1.x"
+  }
+}
