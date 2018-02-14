@@ -24,11 +24,12 @@ API endpoint - http://yourdomain.com/api. This URL is used for initial login to 
 
 Data providers are reponsible for creating the data to be returned to a client using an array of arguments from URL path. To create a data provider you'll need to write another module which should inplement hook `module.api.data`
 
-    public function hookModuleApiData(array $arguments, array $user, &$response, $controller){
+    public function hookModuleApiData(array $params, array $user, &$response, $controller){
     	
-		$version = array_pop($arguments);
-    	
-		list($arg1, $arg2) = $arguments;
+		$query = $params['query']; // GET query array
+		$version = isset($query['version']) ? $query['version'] : 1; // API version
+		
+		list($arg1, $arg2) = $params['arguments']; // Exploded path arguments
     
     	if($arg1 === 'products'){
     		$response = array(...); // Output an array of products
