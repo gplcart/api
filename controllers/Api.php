@@ -158,12 +158,14 @@ class Api extends Controller
 
             try {
 
-                $this->hook->attach('module.api.data', $this->data_arguments, $this->data_user, $this->data_response, $this);
+                $this->hook->attach('module.api.process', $this->data_arguments, $this->data_user, $this->data_response, $this);
 
                 if (isset($this->data_response)) {
                     $this->hook->attach('module.api.output', $this->data_arguments, $this->data_user, $this->data_response, $this);
                     $this->outputJson($this->data_response);
                 }
+
+                throw new RuntimeException('Not content to output', 204);
 
             } catch (Exception $ex) {
                 throw new RuntimeException($ex->getMessage(), 500);
