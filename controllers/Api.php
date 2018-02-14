@@ -204,19 +204,19 @@ class Api extends Controller
      */
     protected function setArgumentsApi($path)
     {
-        $this->data_arguments = array_filter(explode('/', trim($path, '/')));
+        $this->data_arguments = array(
+            'arguments' => array_filter(explode('/', trim($path, '/'))));
 
-        if (empty($this->data_arguments)) {
+        if (empty($this->data_arguments['arguments'])) {
             throw new UnexpectedValueException('Invalid number of arguments passed', 400);
         }
 
-        $version = $this->getQuery('version');
+        $this->data_arguments['query'] = $this->getQuery(null, array(), 'array');
 
-        if (isset($version) && version_compare($version, '0.0.1', '>=') < 0) {
+        if (isset($this->data_arguments['query']['version'])
+            && version_compare($this->data_arguments['query']['version'], '0.0.1', '>=') < 0) {
             throw new UnexpectedValueException('Version has invalid value', 400);
         }
-
-        $this->data_arguments[] = $version;
     }
 
 }
