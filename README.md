@@ -3,7 +3,7 @@
 
 API is a [GPL Cart](https://github.com/gplcart/gplcart) module that helps to implement WEB API for your GPLCart. Basically it provides a simple authorization mechanism based on [JWT tokens](https://jwt.io) and uses other modules as a data source. It does nothing by itself, so do not install unless other modules require it.
 
-**Requirements**
+**Dependencies**
 
 - [Oauth module](https://github.com/gplcart/oauth)
 
