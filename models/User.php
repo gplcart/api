@@ -10,7 +10,6 @@
 namespace gplcart\modules\api\models;
 
 use gplcart\core\Config;
-use gplcart\core\Hook;
 use gplcart\core\interfaces\Crud as CrudInterface;
 
 /**
@@ -25,18 +24,10 @@ class User implements CrudInterface
     protected $db;
 
     /**
-     * Hook class instance
-     * @var \gplcart\core\Hook $hook
-     */
-    protected $hook;
-
-    /**
-     * @param Hook $hook
      * @param Config $config
      */
-    public function __construct(Hook $hook, Config $config)
+    public function __construct(Config $config)
     {
-        $this->hook = $hook;
         $this->db = $config->getDb();
     }
 
@@ -51,19 +42,10 @@ class User implements CrudInterface
             $condition = array('api_user_id' => $condition);
         }
 
-        $result = null;
-        $this->hook->attach('module.api.user.get.before', $condition, $result, $this);
-
-        if (isset($result)) {
-            return $result;
-        }
-
         $condition['limit'] = array(0, 1);
         $list = (array) $this->getList($condition);
-        $result = empty($list) ? array() : reset($list);
 
-        $this->hook->attach('module.api.user.get.after', $condition, $result, $this);
-        return $result;
+        return empty($list) ? array() : reset($list);
     }
 
     /**
@@ -73,7 +55,6 @@ class User implements CrudInterface
      */
     public function getList(array $options = array())
     {
-
         $sql = 'SELECT au.*, u.status AS user_status, u.role_id AS user_role_id';
 
         if (!empty($options['count'])) {
@@ -140,18 +121,8 @@ class User implements CrudInterface
      */
     public function add(array $data)
     {
-        $result = null;
-        $this->hook->attach('module.api.user.add.before', $data, $result, $this);
-
-        if (isset($result)) {
-            return (int) $result;
-        }
-
         $data['created'] = $data['modified'] = GC_TIME;
-        $result = $this->db->insert('module_api_user', $data);
-        $this->hook->attach('module.api.user.add.after', $data, $result, $this);
-
-        return (int) $result;
+        return (int) $this->db->insert('module_api_user', $data);
     }
 
     /**
@@ -161,17 +132,7 @@ class User implements CrudInterface
      */
     public function delete($id)
     {
-        $result = null;
-        $this->hook->attach('module.api.user.delete.before', $id, $result, $this);
-
-        if (isset($result)) {
-            return (bool) $result;
-        }
-
-        $result = (bool) $this->db->delete('module_api_user', array('api_user_id' => $id));
-        $this->hook->attach('module.api.user.delete.after', $id, $result, $this);
-
-        return (bool) $result;
+        return (bool) $this->db->delete('module_api_user', array('api_user_id' => $id));
     }
 
     /**
@@ -182,17 +143,7 @@ class User implements CrudInterface
      */
     public function update($id, array $data)
     {
-        $result = null;
-        $this->hook->attach('module.api.user.update.before', $id, $data, $result, $this);
-
-        if (isset($result)) {
-            return (bool) $result;
-        }
-
         $data['modified'] = GC_TIME;
-        $result = (bool) $this->db->update('module_api_user', $data, array('api_user_id' => $id));
-        $this->hook->attach('module.api.user.update.after', $id, $data, $result, $this);
-
-        return (bool) $result;
+        return (bool) $this->db->update('module_api_user', $data, array('api_user_id' => $id));
     }
 }

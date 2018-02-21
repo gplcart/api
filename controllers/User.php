@@ -53,7 +53,6 @@ class User extends Controller
     public function listUser()
     {
         $this->actionListUser();
-
         $this->setTitleListUser();
         $this->setBreadcrumbListUser();
         $this->setFilterListUser();
@@ -89,7 +88,7 @@ class User extends Controller
      */
     protected function setFilterListUser()
     {
-        $this->setFilter(array('created', 'modified', 'name', 'api_user_id', 'user_id'));
+        $this->setFilter(array('created', 'modified', 'name', 'api_user_id', 'user_id', 'status'));
     }
 
     /**

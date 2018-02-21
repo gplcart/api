@@ -53,7 +53,7 @@
           <a href="<?php echo $sort_modified; ?>"><?php echo $this->text('Modified'); ?> <i class="fa fa-sort"></i></a>
         </th>
         <th>
-          <a href="<?php echo $sort_modified; ?>"><?php echo $this->text('Enabled'); ?> <i class="fa fa-sort"></i></a>
+          <a href="<?php echo $sort_status; ?>"><?php echo $this->text('Enabled'); ?> <i class="fa fa-sort"></i></a>
         </th>
         <th>
           <?php echo $this->text('IP'); ?>
@@ -98,10 +98,6 @@
 <?php } ?>
 </form>
 <?php } else { ?>
-<div class="row">
-  <div class="col-md-12">
     <?php echo $this->text('There are no items yet'); ?>
-  </div>
-</div>
 <?php } ?>
 

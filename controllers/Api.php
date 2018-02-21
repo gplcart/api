@@ -44,7 +44,7 @@ class Api extends Controller
      * An array of arguments from URL
      * @var array
      */
-    protected $data_arguments = array();
+    protected $data_params = array();
 
     /**
      * An array of API data to output
@@ -74,7 +74,7 @@ class Api extends Controller
             $this->controlAccessApi();
             $this->setUserApi();
             $this->outputTokenApi();
-            $this->setArgumentsApi($arguments);
+            $this->setParamsApi($arguments);
             $this->setResponseApi();
         } catch (Exception $ex) {
             $code = $ex->getCode() ?: 403;
@@ -156,29 +156,15 @@ class Api extends Controller
                 throw new RuntimeException($ex->getMessage(), 401);
             }
 
-            try {
+            $this->hook->attach('module.api.process', $this->data_params, $this->data_user, $this->data_response, $this);
 
-                $this->hook->attach('module.api.process', $this->data_arguments, $this->data_user, $this->data_response, $this);
-                $this->outputApi();
-
-            } catch (Exception $ex) {
-                throw new RuntimeException($ex->getMessage(), 500);
+            if (!isset($this->data_response)) {
+                throw new RuntimeException('Not content to output', 204);
             }
-        }
-    }
 
-    /**
-     * Output API data
-     * @throws RuntimeException
-     */
-    protected function outputApi()
-    {
-        if (!isset($this->data_response)) {
-            throw new RuntimeException('Not content to output', 204);
+            $this->hook->attach('module.api.output', $this->data_params, $this->data_user, $this->data_response, $this);
+            $this->outputJson($this->data_response);
         }
-
-        $this->hook->attach('module.api.output', $this->data_arguments, $this->data_user, $this->data_response, $this);
-        $this->outputJson($this->data_response);
     }
 
     /**
@@ -208,25 +194,34 @@ class Api extends Controller
     }
 
     /**
-     * Sets an array of arguments from a string
+     * Sets an array of parameters to be used as arguments in processors
      * @param string $path
      * @throws UnexpectedValueException
      */
-    protected function setArgumentsApi($path)
+    protected function setParamsApi($path)
     {
-        $this->data_arguments = array(
+        $this->data_params = array(
+            'version' => null,
             'arguments' => array_filter(explode('/', trim($path, '/'))));
 
-        if (empty($this->data_arguments['arguments'])) {
+        if (empty($this->data_params['arguments'])) {
             throw new UnexpectedValueException('Invalid number of arguments passed', 400);
         }
 
-        $this->data_arguments['query'] = $this->getQuery(null, array(), 'array');
+        $this->data_params['get'] = $this->getQuery(null, array(), 'array');
+        $this->data_params['post'] = $this->getPosted(null, array(), true, 'array');
 
-        if (isset($this->data_arguments['query']['version'])
-            && version_compare($this->data_arguments['query']['version'], '0.0.1', '>=') < 0) {
-            throw new UnexpectedValueException('Version has invalid value', 400);
+        if (isset($this->data_params['get']['version'])) {
+
+            $this->data_params['version'] = $this->data_params['get']['version'];
+            unset($this->data_params['get']['version']);
+
+            if (version_compare($this->data_params['version'], '0.0.1', '>=') < 0) {
+                throw new UnexpectedValueException('Version has invalid value', 400);
+            }
         }
+
+        $this->hook->attach('module.api.parameters', $this->data_params, $this);
     }
 
 }

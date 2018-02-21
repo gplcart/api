@@ -10,7 +10,6 @@
 namespace gplcart\modules\api\models;
 
 use gplcart\core\helpers\Server;
-use gplcart\core\Hook;
 use gplcart\core\Module;
 use gplcart\modules\oauth\helpers\Jwt;
 use InvalidArgumentException;
@@ -21,18 +20,6 @@ use UnexpectedValueException;
  */
 class Api
 {
-
-    /**
-     * Hook class instance
-     * @var \gplcart\core\Hook $hook
-     */
-    protected $hook;
-
-    /**
-     * Module class instance
-     * @var \gplcart\core\Module $module
-     */
-    protected $module;
 
     /**
      * JWT helper class instance
@@ -53,17 +40,21 @@ class Api
     protected $server;
 
     /**
-     * @param Hook $hook
+     * Module class instance
+     * @var \gplcart\core\Module $module
+     */
+    protected $module;
+
+    /**
      * @param Module $module
      * @param Server $server
      * @param User $user
      * @param Jwt $jwt
      */
-    public function __construct(Hook $hook, Module $module, Server $server, User $user, Jwt $jwt)
+    public function __construct(Module $module, Server $server, User $user, Jwt $jwt)
     {
         $this->jwt = $jwt;
         $this->user = $user;
-        $this->hook = $hook;
         $this->module = $module;
         $this->server = $server;
     }

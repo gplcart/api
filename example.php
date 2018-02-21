@@ -28,7 +28,8 @@ function login($url, $client_id, $client_secret)
     $result = curl_exec($ch);
     curl_close($ch);
 
-    return json_decode($result, true);
+    $decoded = json_decode($result, true);
+    return is_array($decoded) ? $decoded : $result;
 }
 
 /**
@@ -49,7 +50,8 @@ function request($url, $access_token, array $data = array())
     $result = curl_exec($ch);
     curl_close($ch);
 
-    return $result;
+    $decoded = json_decode($result, true);
+    return is_array($decoded) ? $decoded : $result;
 }
 
 /**
@@ -83,5 +85,5 @@ function fetch($url, $client_id, $client_secret, array $post_data = array(), $fo
         return request($url, $result['access_token'], $post_data);
     }
 
-    return false;
+    return $result;
 }
